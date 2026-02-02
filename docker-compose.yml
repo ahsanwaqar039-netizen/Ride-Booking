@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Using local PostgreSQL from pgAdmin4 - postgres service commented out
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: ride_booking_db
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: ahsan66443
+  #     POSTGRES_DB: ride_booking_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend/RideBookingService
+      dockerfile: Dockerfile
+    container_name: ride_booking_backend
+    environment:
+      # Use host.docker.internal to connect to local PostgreSQL from Docker container
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Port=5432;Database=ride_booking_db;Username=postgres;Password=ahsan66443
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: ride_booking_ai
+    ports:
+      - "5001:5001"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ride_booking_frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+# Volumes not needed since using local PostgreSQL
+# volumes:
+#   postgres_data:

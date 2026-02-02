@@ -1,0 +1,30 @@
+# Common
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
+
+# Frontend (Next.js/Node)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.vercel/
+
+# Backend (.NET)
+backend/RideBookingService/bin/
+backend/RideBookingService/obj/
+**/bin/
+**/obj/
+
+# AI Service (Python)
+ai-service/__pycache__/
+ai-service/venv/
+ai-service/.venv/
+*.pyc
+*.pyo
+*.pyd
+
+# Docker
+.dockerignore
